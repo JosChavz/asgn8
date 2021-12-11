@@ -12,17 +12,17 @@ int main(void) {
   int opt = getopt(argc, argv, OPTIONS);
 
   while (opt != -1) {
-	  switch(opt) {
-		  case 'h':
-			  print_help();
-			  return 0;
-		break;
-		case 'a':
-			  //tbd
-		break;
-	  }
+    switch (opt) {
+    case 'h':
+      print_help();
+      return 0;
+      break;
+    case 'a':
+      // tbd
+      break;
+    }
 
-	  opt = getopt(argc, argv, OPTIONS);
+    opt = getopt(argc, argv, OPTIONS);
   }
 
   return 0;
