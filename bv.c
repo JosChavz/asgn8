@@ -49,9 +49,9 @@ uint32_t bv_length(BitVector *bv) {
 }
 
 bool bv_set_bit(BitVector *bv, uint32_t i) {
-	bv->writes += 1;
 	if (bv && i < bv->length) {
 		bv->vector[i/64] |= (uint64_t) 0x1 << i % 64;
+		bv->writes += 1;
 		return true;
 	}
 
@@ -59,9 +59,10 @@ bool bv_set_bit(BitVector *bv, uint32_t i) {
 }
 
 bool bv_clr_bit(BitVector *bv, uint32_t i) {
-	bv->writes += 1;
 	if (bv && i < bv->length) {
 		bv->vector[i / 64] &= ~((uint64_t) 0x1 << (i % 64));
+		bv->writes += 1;
+		return true;
 	}
 
 	return false;
@@ -71,7 +72,7 @@ bool bv_get_bit(BitVector *bv, uint32_t i, bool *bit) {
 	if (bv && i < bv->length) {
 		// Firstly grabs the bit that resides in i-position
 		// Then moves that bit to the LSB
-        uint64_t curr_bit = (bv->vector[i / 64] & (uint64_t) 0x1 << i % 64) >> i % 64;
+		uint64_t curr_bit = (bv->vector[i / 64] & (uint64_t) 0x1 << i % 64) >> i % 64;
 		*bit = curr_bit;
 
 		return true;
@@ -81,19 +82,20 @@ bool bv_get_bit(BitVector *bv, uint32_t i, bool *bit) {
 }
 
 bool bv_set_64(BitVector *bv, uint32_t i) {
-	bv->writes += 1;
 	if (bv && i < bv->length) {
 		bv->vector[i/64] |= ~((uint64_t) 0);
-        return true;
+		bv->writes += 1;
+		return true;
 	}
 
 	return false;
 }
 
 bool bv_clr_64(BitVector *bv, uint32_t i) {
-	bv->writes += 1;
 	if (bv->vector) {
 		bv->vector[i / 64] &= (uint64_t) 0;
+		bv->writes += 1;
+		return true;
 	}
 
 	return false;
