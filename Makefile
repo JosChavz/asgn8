@@ -1,23 +1,26 @@
+# Makefile is created by Ben
+# 190n/asgn8
 CC = clang
-CFLAGS= -Wall -Wextra -Werror -Wpedantic
-OFILES = bv.o field.o
-EXEC = grass
+CFLAGS = -Wall -Wextra -Werror -Wpedantic -O2 -g -I.
+LFLAGS =
+OBJS=bv.o field.o grass.o
 
-all: $(EXEC)
-	$(CC) $(CFLAGS) -o $@ $^ $(OFILES)
+all: grass
 
-grass.o: $(OFILES) grass.c
-	$(CC) $(CFLAGS) -c grass.c
+grass: $(OBJS)
+	$(CC) $(LDFLAGS) -o grass $(OBJS)
 
-bv.o: bv.c
-	$(CC) $(CFLAGS) -c bv.c
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-field.o: field.c
-	$(CC) $(CFLAGS) -c field.c
+clean: 
+	$(RM) grass *.o
 
-clean:
-	rm -f $(EXEC) *.o
+# --use-cc=clang allows it to run without GCC installed per @242 on Piazza
+scan-build: clean
+	scan-build --use-cc=clang make
 
+# suggested by tutor Eric
 format:
 	clang-format -i -style=file *.[ch]
 
