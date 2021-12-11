@@ -16,8 +16,10 @@ int main(void) {
 		  case 'h':
 			  print_help();
 			  return 0;
+		break;
 		case 'a':
 			  //tbd
+		break;
 	  }
 
 	  opt = getopt(argc, argv, OPTIONS);
