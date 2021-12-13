@@ -16,7 +16,7 @@ BitVector *bv_create(uint32_t size) {
   BitVector *bv = (BitVector *)malloc(sizeof(BitVector));
 
   if (bv != NULL) {
-    bv->length = 0;
+    bv->length = size;
     bv->writes = 0;
     // Allocate memory for vector
     // n x n BITS in vector, thus allocation is size / 64
@@ -112,8 +112,8 @@ void bv_print(BitVector *bv) {
   printf("%c ", '[');
   for (uint32_t i = 0; i < bv->length; i++) {
     bool temp_b = false;
-    bool c_bit = bv_get_bit(bv, i, &temp_b);
-    printf("%d ", c_bit);
+    bv_get_bit(bv, i, &temp_b);
+    printf("%d ", temp_b);
   }
   printf("%c\n", ']');
 }

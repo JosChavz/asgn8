@@ -16,7 +16,7 @@ Field *field_create(uint32_t size) {
 
   if (field != NULL) {
     field->size = size;
-    field->matrix = (BitVector *)bv_create(size * size);
+    field->matrix = bv_create(size * size);
 
     if (field->matrix == NULL) {
       free(field);
@@ -61,7 +61,7 @@ uint32_t field_count(Field *f) {
 }
 
 uint32_t field_writes(Field *f) {
-  if (f) {
+  if (f != NULL) {
     return bv_writes(f->matrix);
   }
 
@@ -71,7 +71,7 @@ uint32_t field_writes(Field *f) {
 void field_touch_sequential(Field *f, uint32_t max_iters, unsigned int seed) {
   (void)seed;
 
-  if (f && max_iters < field_area(f)) {
+  if (f != NULL) {
     for (uint32_t i = 0; i < max_iters; i += 1) {
       bv_set_bit(f->matrix, i);
     }
@@ -85,7 +85,8 @@ void field_touch_sequential(Field *f, uint32_t max_iters, unsigned int seed) {
 void field_touch_wide(Field *f, uint32_t max_iters, unsigned int seed) {
   (void)seed;
 
-  if (f && max_iters < field_area(f)) {
+  if (f != NULL) {
+	  printf("is here");
     for (uint32_t i = 0; i < max_iters; i += 1) {
       bv_set_64(f->matrix, i);
     }
@@ -95,15 +96,17 @@ void field_touch_wide(Field *f, uint32_t max_iters, unsigned int seed) {
 }
 
 void field_touch_random(Field *f, uint32_t max_iters, unsigned int seed) {
-  if (f && max_iters < field_area(f)) {
+  if (f != NULL) {
     // Sets the random seed
     srandom(seed);
     for (uint32_t i = 0; i < max_iters; i += 1) {
-      bv_set_64(f->matrix, random() % field_area(f));
+      bv_set_bit(f->matrix, random() % field_area(f));
     }
   }
 
   return;
 }
 
-void field_print(Field *f);
+void field_print(Field *f) {
+	bv_print(f->matrix);	
+}
