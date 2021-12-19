@@ -1,6 +1,7 @@
 #include "field.h"
 #include "bv.h"
 
+#include <inttypes.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -85,8 +86,10 @@ void field_touch_sequential(Field *f, uint32_t max_iters, unsigned int seed) {
 void field_touch_wide(Field *f, uint32_t max_iters, unsigned int seed) {
   (void)seed;
 
+  // User max_iters will be ignored lol
+  max_iters = field_area(f);
+
   if (f != NULL) {
-	  printf("is here");
     for (uint32_t i = 0; i < max_iters; i += 1) {
       bv_set_64(f->matrix, i);
     }
@@ -108,5 +111,13 @@ void field_touch_random(Field *f, uint32_t max_iters, unsigned int seed) {
 }
 
 void field_print(Field *f) {
-	bv_print(f->matrix);	
+  for (uint32_t i = 0; i < f->size; i += 1) {
+    for (uint32_t x = 0; x < f->size; x += 1) {
+      bool curr_bit = false;
+      uint32_t index = i * f->size + x;
+      bv_get_bit(f->matrix, index, &curr_bit);
+      printf("%s", (curr_bit) ? "_" : "/");
+    }
+    printf("\n");
+  }
 }

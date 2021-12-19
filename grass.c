@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #define OPTIONS "aswrvhi:n:S:"
-#define DEFAULT_SEED 756670
+#define DEFAULT_SEED 7566707
 #define DEFAULT_SIZE 10
 #define MAX_SIZE 1024
 
@@ -30,9 +30,9 @@ typedef enum { ALL, SEQUENTIAL, WIDE, RANDOM, HELP } Funcs;
 static bool verbose = false;
 
 int main(int argc, char **argv) {
-//	BitVector *bv = bv_create(50);
-//	bv_set_bit(bv, 0);
-//	bv_print(bv);
+  //	BitVector *bv = bv_create(50);
+  //	bv_set_bit(bv, 0);
+  //	bv_print(bv);
 
   // Initializing
   uint32_t seed = DEFAULT_SEED;
@@ -159,7 +159,7 @@ int main(int argc, char **argv) {
         Field *f = field_create(size);
 
         functions[fn - 1](f, iters, seed);
-	field_print(f);
+        field_print(f);
 
         if (verbose) {
           uint32_t touched = field_count(f);
@@ -180,15 +180,18 @@ int main(int argc, char **argv) {
 }
 
 void print_help() {
-  printf("AYUDA ME!\n");
+  printf("SYNOPSIS\n\tCompare different methods of touching grass.\n\n");
+  printf("USAGE\n\t./grass [-aswrvh] [-f size] [-n seed]\n\n");
+  printf("OPTIONS\n");
   return;
 }
 
 void all_functions(uint32_t size, uint32_t max_iters, unsigned int seed) {
   for (int i = 0; i < 3; i++) {
     Field *f = field_create(size);
-    printf("Max iters: %" PRIu32 "\n", max_iters);
+    printf("%s:\n", function_type[i]);
     functions[i](f, max_iters, seed);
+    field_print(f);
 
     if (verbose) {
       uint32_t touched = field_count(f);
@@ -197,8 +200,8 @@ void all_functions(uint32_t size, uint32_t max_iters, unsigned int seed) {
       printf("%s:\n", function_type[i]);
       printf("\t%20s%" PRIu32 "\n", "Touched blades:", touched);
       printf("\t%20s%" PRIu32 "\n", "BitVector writes:", writes);
-      printf("\t%20s%f%%\n", "Efficiency:",
-             100 * ((double)writes / (double)touched));
+      printf("\t%20s%f%%\n",
+             "Efficiency:", 100 * ((double)writes / (double)touched));
     }
     field_delete(&f);
   }
