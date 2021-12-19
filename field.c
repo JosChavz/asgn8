@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Ben's field.c to fix wide
+#define MIN(x, y) ((x < y) ? x : y)
+
 typedef struct Field {
   uint32_t size;
   BitVector *matrix;
@@ -86,12 +89,14 @@ void field_touch_sequential(Field *f, uint32_t max_iters, unsigned int seed) {
 void field_touch_wide(Field *f, uint32_t max_iters, unsigned int seed) {
   (void)seed;
 
-  // User max_iters will be ignored lol
-  max_iters = field_area(f);
+  // Ben.c - field.c to fix this function
+  uint32_t area = field_area(f),
+		   necessary_iters = area % 64 == 0 ? (area / 64) : (area / 64 + 1),
+		   end = MIN(max_iters, necessary_iters);
 
   if (f != NULL) {
-    for (uint32_t i = 0; i < max_iters; i += 1) {
-      bv_set_64(f->matrix, i);
+    for (uint32_t i = 0; i < end; i += 1) {
+      bv_set_64(f->matrix, i*64);
     }
   }
 
