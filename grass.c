@@ -191,17 +191,19 @@ void all_functions(uint32_t size, uint32_t max_iters, unsigned int seed) {
     Field *f = field_create(size);
     printf("%s:\n", function_type[i]);
     functions[i](f, max_iters, seed);
-    field_print(f);
 
     if (verbose) {
-      uint32_t touched = field_count(f);
+      uint32_t count = field_count(f);
       uint32_t writes = field_writes(f);
+	  double efficiency = 100 * count / writes;
 
-      printf("%s:\n", function_type[i]);
-      printf("\t%20s%" PRIu32 "\n", "Touched blades:", touched);
+      printf("\t%20s%" PRIu32 "\n", "Touched blades:", count);
       printf("\t%20s%" PRIu32 "\n", "BitVector writes:", writes);
       printf("\t%20s%f%%\n",
-             "Efficiency:", 100 * ((double)writes / (double)touched));
+             "Efficiency:", efficiency);
+    } else {
+      // Prints field when verbose is not declared
+      field_print(f);
     }
     field_delete(&f);
   }
